@@ -243,8 +243,18 @@ h2 {
 
 /* ─── Gate steps ─────────────────────────────── */
 
+@keyframes softPulseCheck {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.95; }
+}
+
 .gate-step {
   transition: opacity 0.2s;
+}
+
+.gate-step h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .gate-checking {
@@ -260,7 +270,9 @@ h2 {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(28px, 5vw, 42px);
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: softPulseCheck 2.1s ease-in-out infinite;
 }
 
 /* ─── Admitted content ───────────────────────── */
