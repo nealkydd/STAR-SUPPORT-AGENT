@@ -227,7 +227,46 @@
 
   // ── Chat ───────────────────────────────────────────────────────
 
-  function showResponse(text) { responseArea.textContent = text; }
+  function renderMarkdown(text) {
+    // Escape HTML
+    var escaped = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    // Bold: **text** or __text__
+    escaped = escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    escaped = escaped.replace(/__(.+?)__/g, '<strong>$1</strong>');
+
+    // Split into lines and process
+    var lines = escaped.split('\n');
+    var html = '';
+    var inList = false;
+
+    lines.forEach(function (line) {
+      var trimmed = line.trim();
+
+      // Bullet: lines starting with - or *
+      if (/^[-*] /.test(trimmed)) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += '<li>' + trimmed.slice(2) + '</li>';
+      } else {
+        if (inList) { html += '</ul>'; inList = false; }
+        if (trimmed === '') {
+          html += '<br>';
+        } else {
+          html += '<p>' + trimmed + '</p>';
+        }
+      }
+    });
+
+    if (inList) html += '</ul>';
+    return html;
+  }
+
+  function showResponse(text) {
+    responseArea.innerHTML = renderMarkdown(text);
+  }
 
   function ask(message) {
     var clean = String(message || '').trim();

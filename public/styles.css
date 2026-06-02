@@ -550,6 +550,33 @@ h2 {
   min-height: 58px;
 }
 
+.support-response p {
+  margin: 0 0 12px;
+}
+
+.support-response p:last-child {
+  margin-bottom: 0;
+}
+
+.support-response ul {
+  margin: 0 0 12px;
+  padding-left: 20px;
+}
+
+.support-response ul:last-child {
+  margin-bottom: 0;
+}
+
+.support-response li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.support-response strong {
+  color: var(--soft-gold);
+  font-weight: 600;
+}
+
 .support-response:empty {
   display: none;
 }
