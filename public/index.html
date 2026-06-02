@@ -26,30 +26,59 @@
       <!-- ── Access gate ────────────────────────── -->
       <div class="access-gate" id="access-gate">
         <div class="gate-card">
-          <p class="eyebrow">Paid Access</p>
-          <h2>Enter your Reader Entry Code</h2>
-          <p class="gate-intro">
-            Star Support is available to Paid Access members.
-            Enter your Reader Entry Code to continue.
-          </p>
 
-          <div class="gate-form">
-            <label for="entry-code">Reader Entry Code</label>
-            <input
-              type="text"
-              id="entry-code"
-              placeholder="Enter your code"
-              autocomplete="off"
-              spellcheck="false"
-            >
-            <p class="gate-error" id="gate-error" hidden>Code not recognised. Please check and try again.</p>
-            <button type="button" id="gate-submit">Continue</button>
+          <!-- Step 1: Email -->
+          <div class="gate-step" id="gate-step-email">
+            <p class="eyebrow">Paid Access</p>
+            <h2>Enter Your Email</h2>
+            <p class="gate-intro">Star Support is available to Paid Access members.</p>
+            <div class="gate-form">
+              <label for="entry-email">Email Address</label>
+              <input
+                type="email"
+                id="entry-email"
+                placeholder="your@email.com"
+                autocomplete="email"
+                spellcheck="false"
+              >
+              <p class="gate-error" id="gate-email-error" hidden>Email not recognised. Please check and try again.</p>
+              <button type="button" id="gate-email-submit">Continue</button>
+            </div>
+            <p class="gate-note">
+              Your access was set up when you purchased a Paid Access product.
+              If you have not received access details, please contact Stoic Qabalah directly.
+            </p>
           </div>
 
-          <p class="gate-note">
-            Your Reader Entry Code was provided when you purchased Paid Access.
-            If you have not received a code, please contact Stoic Qabalah support directly.
-          </p>
+          <!-- Step 2: Checking -->
+          <div class="gate-step gate-checking" id="gate-checking" hidden>
+            <p class="gate-checking-text">Checking…</p>
+          </div>
+
+          <!-- Step 3: Reader Entry Code -->
+          <div class="gate-step" id="gate-step-code" hidden>
+            <p class="eyebrow">Reader Entry Code</p>
+            <h2>Enter Your Reader Entry Code</h2>
+            <div class="gate-form">
+              <label for="entry-code">Member Access</label>
+              <input
+                type="text"
+                id="entry-code"
+                placeholder="6-digit code"
+                autocomplete="off"
+                spellcheck="false"
+                inputmode="numeric"
+                maxlength="6"
+              >
+              <p class="gate-error" id="gate-code-error" hidden>Code not recognised. Please check and try again.</p>
+              <button type="button" id="gate-code-submit">Verify</button>
+            </div>
+            <p class="gate-note">
+              Your Reader Entry Code was sent to your email address.
+              If you did not receive it, please check your spam folder.
+            </p>
+          </div>
+
         </div>
       </div>
 
@@ -67,7 +96,6 @@
               View Account Details
             </button>
           </div>
-
           <div class="account-details" id="account-details" hidden>
             <div class="account-fields" id="account-fields"></div>
           </div>
@@ -90,19 +118,16 @@
             <h3>Reader Entry Code</h3>
             <p>Help with access, code checks, and paid-member entry queries.</p>
           </article>
-
           <article>
             <span>02</span>
             <h3>Reader Guidance</h3>
             <p>Understand where to begin, including My Chart Data and Summary.</p>
           </article>
-
           <article class="blue-panel">
             <span>03</span>
             <h3>Credit Queries</h3>
             <p>How Oracle-layer credits work and help with balance issues.</p>
           </article>
-
           <article class="blue-panel">
             <span>04</span>
             <h3>Account Support</h3>

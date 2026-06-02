@@ -62,7 +62,7 @@ body {
   background-size: cover;
   background-position: center 30%;
   background-repeat: no-repeat;
-  opacity: 0.22;
+  opacity: 0.32;
   z-index: 0;
   border-radius: inherit;
 }
@@ -74,10 +74,10 @@ body {
   inset: 0;
   background:
     linear-gradient(180deg,
-      rgba(10, 9, 7, 0.72) 0%,
-      rgba(10, 9, 7, 0.45) 40%,
-      rgba(10, 9, 7, 0.72) 100%),
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(10, 9, 7, 0.5), transparent);
+      rgba(10, 9, 7, 0.58) 0%,
+      rgba(10, 9, 7, 0.32) 40%,
+      rgba(10, 9, 7, 0.58) 100%),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(10, 9, 7, 0.4), transparent);
   z-index: 1;
   border-radius: inherit;
 }
@@ -174,7 +174,7 @@ h2 {
 }
 
 .gate-form label {
-  color: var(--muted);
+  color: #C9A45D;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.14em;
@@ -239,6 +239,28 @@ h2 {
   line-height: 1.65;
   border-top: 1px solid var(--border);
   padding-top: 18px;
+}
+
+/* ─── Gate steps ─────────────────────────────── */
+
+.gate-step {
+  transition: opacity 0.2s;
+}
+
+.gate-checking {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 120px;
+}
+
+.gate-checking-text {
+  margin: 0;
+  color: var(--gold);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 500;
+  letter-spacing: 0.06em;
 }
 
 /* ─── Admitted content ───────────────────────── */
