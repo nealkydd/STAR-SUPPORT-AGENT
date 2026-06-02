@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Star Support — Stoic Qabalah Support Agent</title>
+  <meta name="description" content="Star Support — the Stoic Qabalah Support Agent for AstroQabalah paid members.">
+  <meta name="theme-color" content="#10100E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="support-shell">
+    <section class="hero-card">
+
+      <!-- ── Branding ──────────────────────────── -->
+      <img src="/sun-logo.jpg" alt="Stoic Qabalah" class="sun-logo">
+      <p class="presented">Stoic Qabalah Presents</p>
+      <h1>Star Support</h1>
+      <p class="subtitle">Your Stoic Qabalah Support Agent</p>
+
+      <!-- ── Access gate ────────────────────────── -->
+      <div class="access-gate" id="access-gate">
+        <div class="gate-card">
+          <p class="eyebrow">Paid Access</p>
+          <h2>Enter your Reader Entry Code</h2>
+          <p class="gate-intro">
+            Star Support is available to Paid Access members.
+            Enter your Reader Entry Code to continue.
+          </p>
+
+          <div class="gate-form">
+            <label for="entry-code">Reader Entry Code</label>
+            <input
+              type="text"
+              id="entry-code"
+              placeholder="Enter your code"
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <p class="gate-error" id="gate-error" hidden>Code not recognised. Please check and try again.</p>
+            <button type="button" id="gate-submit">Continue</button>
+          </div>
+
+          <p class="gate-note">
+            Your Reader Entry Code was provided when you purchased Paid Access.
+            If you have not received a code, please contact Stoic Qabalah support directly.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── Admitted content ───────────────────── -->
+      <div class="admitted-content" id="admitted-content" hidden>
+
+        <!-- Account panel -->
+        <div class="account-panel" id="account-panel">
+          <div class="account-header">
+            <div>
+              <p class="eyebrow">Your Account</p>
+              <p class="account-email" id="account-email">Loading…</p>
+            </div>
+            <button type="button" class="account-details-btn" id="account-details-btn">
+              View Account Details
+            </button>
+          </div>
+
+          <div class="account-details" id="account-details" hidden>
+            <div class="account-fields" id="account-fields"></div>
+          </div>
+        </div>
+
+        <!-- Notice -->
+        <div class="notice-card">
+          <p class="eyebrow">AstroQabalah</p>
+          <h2>The Tree of Life Reader &amp; Hermetic Oracle App</h2>
+          <p>
+            Paid Access members can use Star Support for help with all of our products and courses.
+            If you have purchased a product recently, please use your Reader Entry Code to open Star Support.
+          </p>
+        </div>
+
+        <!-- Support grid -->
+        <div class="support-grid">
+          <article>
+            <span>01</span>
+            <h3>Reader Entry Code</h3>
+            <p>Help with access, code checks, and paid-member entry queries.</p>
+          </article>
+
+          <article>
+            <span>02</span>
+            <h3>Reader Guidance</h3>
+            <p>Understand where to begin, including My Chart Data and Summary.</p>
+          </article>
+
+          <article class="blue-panel">
+            <span>03</span>
+            <h3>Credit Queries</h3>
+            <p>How Oracle-layer credits work and help with balance issues.</p>
+          </article>
+
+          <article class="blue-panel">
+            <span>04</span>
+            <h3>Account Support</h3>
+            <p>Raise requests for paid access, account changes, or service issues.</p>
+          </article>
+        </div>
+
+        <!-- Chat panel -->
+        <section class="chat-card" aria-label="Star Support chat">
+          <div class="chat-header">
+            <div>
+              <p class="eyebrow">Star Support</p>
+              <h2>How can I help?</h2>
+            </div>
+            <div class="status-pill">Paid Access</div>
+          </div>
+
+          <div class="quick-actions">
+            <button type="button">Reader Entry Code help</button>
+            <button type="button">Guide me through the Reader</button>
+            <button type="button">Credit query</button>
+            <button type="button">Account support</button>
+          </div>
+
+          <div class="support-response" id="support-response" aria-live="polite"></div>
+
+          <form class="chat-form">
+            <label for="support-message">Your question</label>
+            <textarea id="support-message" placeholder="Tell Star Support what you need help with..." rows="4"></textarea>
+            <button type="button" id="ask-button">Ask Star Support</button>
+          </form>
+
+          <p class="small-note">
+            Star Support cannot process credit top-ups directly, but may provide the correct top-up link.
+            It does not reveal private Reader, Oracle, Stoic logic, or synthesis architecture.
+          </p>
+        </section>
+
+      </div><!-- /admitted-content -->
+
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

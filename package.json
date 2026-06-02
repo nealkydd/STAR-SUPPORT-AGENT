@@ -1,0 +1,19 @@
+{
+  "name": "stoicqabalahsupportagent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Stoic Qabalah Support Agent — Star Support for AstroQabalah.",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@supabase/supabase-js": "^2.47.10",
+    "resend": "^4.0.1"
+  },
+  "devDependencies": {
+    "vercel": "^39.1.1"
+  }
+}
