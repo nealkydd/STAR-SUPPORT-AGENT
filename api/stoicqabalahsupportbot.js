@@ -2,10 +2,10 @@
 // Verifies session, checks/deducts support_chat_credits_remaining, calls Anthropic.
 //
 // Credit rules:
-//   - support_access_enabled = true  → admin bypass, no deduction
 //   - support_chat_credits_remaining = 0 → blocked, polite message, no Anthropic call
 //   - Successful Anthropic answer → decrement by 1, log to support_credit_events
 //   - Anthropic failure or session invalid → no deduction
+//   - All accounts deduct equally — no admin bypass
 //
 // credits_remaining (Oracle/app) is never touched here.
 
@@ -52,11 +52,9 @@ export default async function handler(req, res) {
     const snapshot     = user ? buildAccountSnapshot(user, entitlements) : null;
 
     // 4. Check support chat credits
-    //    Admin bypass (support_access_enabled = true) skips deduction entirely.
-    const adminOverride  = user?.support_access_enabled === true;
     const supportCredits = user?.support_chat_credits_remaining ?? 0;
 
-    if (!adminOverride && supportCredits <= 0) {
+    if (supportCredits <= 0) {
       return res.status(200).json({
         ok:     true,
         answer: 'Your Star Support chat credits have been used. You can add more support access through Stoic Qabalah.',
@@ -77,16 +75,14 @@ export default async function handler(req, res) {
     const answer = response.content?.[0]?.text?.trim()
       || 'I was unable to generate a response. Please try again.';
 
-    // 6. Deduct credit and log — only after successful answer, only for non-admin
-    if (!adminOverride) {
-      const newBalance = await decrementSupportCredits(session.email);
-      await logSupportCreditEvent(session.email, {
-        amount:        -1,
-        event_type:    'support_chat_used',
-        balance_after: newBalance,
-        source:        'star_support_chat',
-      });
-    }
+    // 6. Deduct credit and log — only after successful answer
+    const newBalance = await decrementSupportCredits(session.email);
+    await logSupportCreditEvent(session.email, {
+      amount:        -1,
+      event_type:    'support_chat_used',
+      balance_after: newBalance,
+      source:        'star_support_chat',
+    });
 
     return res.status(200).json({ ok: true, answer });
 
