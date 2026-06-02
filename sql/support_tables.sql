@@ -11,7 +11,7 @@ create extension if not exists "pgcrypto";
 -- Core member record. One row per email address.
 -- access_status values:  'active' | 'inactive' | 'trial' | 'expired' | 'cancelled'
 -- role values:           'member' | 'admin'
--- oracle_credits_remaining: credits for Reader/Oracle app usage
+-- credits_remaining: Oracle/app credits (existing field — do not rename)
 -- support_chat_credits_remaining: credits for Star Support chat
 -- support_access_enabled: true = admin/lifetime bypass (ignores credit check)
 
@@ -19,7 +19,7 @@ create table if not exists public.users (
   email                           text        primary key,
   role                            text        not null default 'member',
   access_status                   text        not null default 'inactive',
-  oracle_credits_remaining        integer     not null default 0,
+  credits_remaining               integer     not null default 0,
   support_chat_credits_remaining  integer     not null default 0,
   support_access_enabled          boolean     not null default false,
   last_support_access_at          timestamptz,

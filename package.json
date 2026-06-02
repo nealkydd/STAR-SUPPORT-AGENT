@@ -5,6 +5,7 @@
   "description": "Stoic Qabalah Support Agent — Star Support for AstroQabalah.",
   "type": "module",
   "scripts": {
+    "local": "node local-server.mjs",
     "dev": "vercel dev",
     "start": "vercel dev"
   },

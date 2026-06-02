@@ -40,7 +40,7 @@
   }
 
   function setChecking(active) {
-    checkingBox.hidden = !active;
+    checkingBox.classList.toggle('active', active);
     emailSubmit.disabled = active;
     if (active) {
       emailError.hidden = true;

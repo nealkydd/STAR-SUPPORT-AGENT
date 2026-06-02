@@ -258,12 +258,16 @@ h2 {
 }
 
 .gate-checking-box {
-  display: inline-flex;
+  display: none;
   align-items: center;
   border: 1px solid rgba(201, 164, 93, 0.3);
   border-radius: 4px;
   padding: 6px 14px;
   animation: softPulseCheck 2.1s ease-in-out infinite;
+}
+
+.gate-checking-box.active {
+  display: inline-flex;
 }
 
 .gate-checking-box span {
