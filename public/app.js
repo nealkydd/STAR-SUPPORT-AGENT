@@ -3,12 +3,13 @@
   // ── Gate elements ──────────────────────────────────────────────
   const gate           = document.getElementById('access-gate');
   const stepEmail      = document.getElementById('gate-step-email');
-  const stepChecking   = document.getElementById('gate-checking');
   const stepCode       = document.getElementById('gate-step-code');
 
   const emailInput     = document.getElementById('entry-email');
   const emailSubmit    = document.getElementById('gate-email-submit');
   const emailError     = document.getElementById('gate-email-error');
+  const checkingBox    = document.getElementById('gate-checking-box');
+  const notFoundBox    = document.getElementById('gate-not-found');
 
   const codeInput      = document.getElementById('entry-code');
   const codeSubmit     = document.getElementById('gate-code-submit');
@@ -31,10 +32,19 @@
   let detailsOpen   = false;
 
   // ── Gate state machine ─────────────────────────────────────────
-  function showOnly(stepEl) {
-    [stepEmail, stepChecking, stepCode].forEach(function (el) {
+  function showStep(stepEl) {
+    [stepEmail, stepCode].forEach(function (el) {
       el.hidden = (el !== stepEl);
     });
+  }
+
+  function setChecking(active) {
+    checkingBox.hidden = !active;
+    emailSubmit.disabled = active;
+    if (active) {
+      emailError.hidden = true;
+      notFoundBox.hidden = true;
+    }
   }
 
   function isValidEmail(v) {
@@ -44,6 +54,7 @@
   // Step 1 — Email submit
   emailSubmit.addEventListener('click', function () {
     emailError.hidden = true;
+    notFoundBox.hidden = true;
     const email = (emailInput.value || '').trim();
 
     if (!isValidEmail(email)) {
@@ -53,7 +64,7 @@
       return;
     }
 
-    showOnly(stepChecking);
+    setChecking(true);
 
     fetch('/api/support-request-code', {
       method: 'POST',
@@ -62,20 +73,23 @@
     })
       .then(function (r) { return r.json(); })
       .then(function (data) {
+        setChecking(false);
         if (data && data.ok) {
           sessionEmail = email;
-          showOnly(stepCode);
+          showStep(stepCode);
           codeInput.focus();
+        } else if (data && data.reason === 'account_not_found') {
+          notFoundBox.hidden = false;
         } else {
-          showOnly(stepEmail);
-          emailError.textContent = 'Email not recognised. Please check and try again.';
+          emailError.textContent = 'Something went wrong. Please try again.';
           emailError.hidden = false;
         }
       })
       .catch(function () {
         // Prototype fallback — accept any valid email
+        setChecking(false);
         sessionEmail = email;
-        showOnly(stepCode);
+        showStep(stepCode);
         codeInput.focus();
       });
   });
@@ -96,8 +110,6 @@
       return;
     }
 
-    showOnly(stepChecking);
-
     fetch('/api/support-auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -108,7 +120,6 @@
         if (data && data.ok) {
           admit(sessionEmail);
         } else {
-          showOnly(stepCode);
           codeError.textContent = reasonMessage(data.reason);
           codeError.hidden = false;
         }

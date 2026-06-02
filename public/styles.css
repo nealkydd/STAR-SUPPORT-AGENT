@@ -257,22 +257,47 @@ h2 {
   letter-spacing: 0.08em;
 }
 
-.gate-checking {
-  display: flex;
+.gate-checking-box {
+  display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 120px;
+  border: 1px solid rgba(201, 164, 93, 0.3);
+  border-radius: 4px;
+  padding: 6px 14px;
+  animation: softPulseCheck 2.1s ease-in-out infinite;
 }
 
-.gate-checking-text {
+.gate-checking-box span {
+  color: rgba(180, 175, 165, 0.65);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.gate-not-found {
+  padding: 14px 0 4px;
+}
+
+.gate-not-found-title {
+  margin: 0 0 6px;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.gate-not-found-sub {
   margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.gate-not-found-sub a {
   color: var(--gold);
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(28px, 5vw, 42px);
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  animation: softPulseCheck 2.1s ease-in-out infinite;
+  text-decoration: none;
+}
+
+.gate-not-found-sub a:hover {
+  text-decoration: underline;
 }
 
 /* ─── Admitted content ───────────────────────── */

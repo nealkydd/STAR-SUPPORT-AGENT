@@ -41,7 +41,14 @@
                 autocomplete="email"
                 spellcheck="false"
               >
-              <p class="gate-error" id="gate-email-error" hidden>Email not recognised. Please check and try again.</p>
+              <div class="gate-checking-box" id="gate-checking-box" hidden>
+                <span>Checking...</span>
+              </div>
+              <div class="gate-not-found" id="gate-not-found" hidden>
+                <p class="gate-not-found-title">No User Account Found</p>
+                <p class="gate-not-found-sub">Please sign up at <a href="https://www.stoicqabalah.com" target="_blank" rel="noopener noreferrer">StoicQabalah.com</a></p>
+              </div>
+              <p class="gate-error" id="gate-email-error" hidden></p>
               <button type="button" id="gate-email-submit">Continue</button>
             </div>
             <p class="gate-note">
@@ -50,12 +57,7 @@
             </p>
           </div>
 
-          <!-- Step 2: Checking -->
-          <div class="gate-step gate-checking" id="gate-checking" hidden>
-            <p class="gate-checking-text">Checking...</p>
-          </div>
-
-          <!-- Step 3: Reader Entry Code -->
+          <!-- Step 2: Reader Entry Code -->
           <div class="gate-step" id="gate-step-code" hidden>
             <p class="eyebrow">Reader Entry Code</p>
             <h2>Enter Your Code</h2>
