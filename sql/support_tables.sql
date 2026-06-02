@@ -11,9 +11,17 @@ create extension if not exists "pgcrypto";
 -- Core member record. One row per email address.
 -- access_status values:  'active' | 'inactive' | 'trial' | 'expired' | 'cancelled'
 -- role values:           'member' | 'admin'
--- credits_remaining: Oracle/app credits (existing field — do not rename)
--- support_chat_credits_remaining: credits for Star Support chat
--- support_access_enabled: true = admin/lifetime bypass (ignores credit check)
+--
+-- CREDIT FIELD RULES — READ CAREFULLY:
+--   credits_remaining              = Oracle/app credits. Owned by the Reader/Oracle system.
+--                                    Star Support may READ this for display only.
+--                                    Star Support must NEVER seed, reset, or update it.
+--                                    Stripe webhooks and the Reader system manage this field.
+--   support_chat_credits_remaining = Star Support chat credits only.
+--                                    Star Support owns and decrements this field.
+--   support_access_enabled         = Admin/lifetime bypass for Star Support gate.
+--
+-- DO NOT use oracle_credits_remaining as a column name — the real field is credits_remaining.
 
 create table if not exists public.users (
   email                           text        primary key,
