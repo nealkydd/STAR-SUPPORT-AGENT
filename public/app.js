@@ -49,7 +49,7 @@
     gateSubmit.textContent = 'Checking…';
 
     // Calls the verify endpoint — returns mock pass for now
-    fetch('/api/verify-code', {
+    fetch('/api/support-auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code })
@@ -79,7 +79,7 @@
 
   // ── Account panel ──────────────────────────────────────────────
   function loadAccount(code) {
-    fetch('/api/account', {
+    fetch('/api/support-account', {
       headers: { 'x-entry-code': code }
     })
       .then(function (r) { return r.json(); })
