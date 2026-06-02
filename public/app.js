@@ -28,6 +28,7 @@
 
   // ── Session ────────────────────────────────────────────────────
   let sessionEmail  = null;
+  let sessionToken  = null;   // raw token — stored in memory only, never persisted
   let accountData   = null;
   let detailsOpen   = false;
 
@@ -118,6 +119,7 @@
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data && data.ok) {
+          sessionToken = data.token || null;
           admit(sessionEmail);
         } else {
           codeError.textContent = reasonMessage(data.reason);
@@ -125,7 +127,7 @@
         }
       })
       .catch(function () {
-        // Prototype fallback — accept any 6-digit code
+        // Prototype fallback — admit without token when API unreachable
         admit(sessionEmail);
       });
   });
@@ -150,13 +152,15 @@
 
   // ── Account panel ──────────────────────────────────────────────
   function loadAccount(email) {
-    fetch('/api/support-account', {
-      headers: { 'x-support-email': email }
-    })
+    var headers = { 'Content-Type': 'application/json' };
+    if (sessionToken) headers['Authorization'] = 'Bearer ' + sessionToken;
+
+    fetch('/api/support-account', { headers: headers })
       .then(function (r) { return r.json(); })
       .then(function (data) {
-        accountData = data;
-        accountEmail.textContent = data.email || email;
+        var account = (data && data.account) ? data.account : data;
+        accountData = account;
+        accountEmail.textContent = account.email || email;
       })
       .catch(function () {
         accountEmail.textContent = email;
@@ -174,15 +178,34 @@
   });
 
   function renderAccountFields(data) {
+    var productNames = (data.active_products || []).map(function (p) {
+      var label = p.name;
+      if (p.billing_type) label += ' (' + p.billing_type + ')';
+      return label;
+    }).join(', ');
+
+    var lastAccess = data.last_support_access_at
+      ? new Date(data.last_support_access_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+      : null;
+
+    var stateLabel = {
+      active:      'Active',
+      trial:       'Trial',
+      low_credits: 'Low Credits',
+      no_credits:  'No Credits Remaining',
+      expired:     'Expired',
+      cancelled:   'Cancelled',
+      no_product:  'No Active Product',
+    }[data.account_state] || data.account_state;
+
     var safe = [
-      { label: 'Email',                value: data.email                 },
-      { label: 'Access Status',        value: data.access_status,  status: true },
-      { label: 'Pass Type',            value: data.pass_type             },
-      { label: 'Entry Code Status',    value: data.entry_code_status     },
-      { label: 'Oracle Credits',       value: data.oracle_credits        },
-      { label: 'Support Chat Credits', value: data.support_credits       },
-      { label: 'Trial Expiry',         value: data.trial_expiry          },
-      { label: 'Last Support Access',  value: data.last_support_access   },
+      { label: 'Email',                value: data.email                              },
+      { label: 'Account State',        value: stateLabel,             status: true    },
+      { label: 'Active Products',      value: productNames || null                    },
+      { label: 'Oracle Credits',       value: data.oracle_credits_remaining           },
+      { label: 'Support Chat Credits', value: data.support_chat_credits_remaining     },
+      { label: 'Top-up Recommended',   value: data.top_up_recommended ? 'Yes' : null  },
+      { label: 'Last Support Access',  value: lastAccess                              },
     ];
 
     accountFields.innerHTML = '';

@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
-    "@supabase/supabase-js": "^2.47.10",
-    "resend": "^4.0.1"
+    "@getbrevo/brevo": "^5.0.4",
+    "@supabase/supabase-js": "^2.47.10"
   },
   "devDependencies": {
     "vercel": "^39.1.1"
