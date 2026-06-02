@@ -141,14 +141,18 @@ create policy "service role full access — support_sessions"
 -- source examples:     'purchase' | 'chat_use' | 'manual' | 'system'
 
 create table if not exists public.support_credit_events (
-  id          uuid        primary key default gen_random_uuid(),
-  email       text        not null references public.users(email) on delete cascade,
-  amount      integer     not null,
-  event_type  text        not null,
-  reason      text,
-  source      text,
-  created_at  timestamptz not null default now()
+  id            uuid        primary key default gen_random_uuid(),
+  email         text        not null references public.users(email) on delete cascade,
+  amount        integer     not null,
+  event_type    text        not null,
+  balance_after integer,
+  reason        text,
+  source        text,
+  created_at    timestamptz not null default now()
 );
+
+-- If table already exists, add balance_after:
+-- alter table public.support_credit_events add column if not exists balance_after integer;
 
 create index if not exists idx_support_credit_events_email
   on public.support_credit_events (email);

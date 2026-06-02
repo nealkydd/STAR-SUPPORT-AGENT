@@ -1,16 +1,21 @@
 // Star Support chat endpoint.
-// Verifies session, loads safe account snapshot, calls Anthropic, returns answer.
+// Verifies session, checks/deducts support_chat_credits_remaining, calls Anthropic.
 //
-// NOTE — credit deduction:
-// support_chat_credits_remaining is read and included in the prompt context
-// but is NOT decremented in this first pass. Deduction will be added once
-// the full flow is confirmed stable. This is intentional and documented.
+// Credit rules:
+//   - support_access_enabled = true  → admin bypass, no deduction
+//   - support_chat_credits_remaining = 0 → blocked, polite message, no Anthropic call
+//   - Successful Anthropic answer → decrement by 1, log to support_credit_events
+//   - Anthropic failure or session invalid → no deduction
+//
+// credits_remaining (Oracle/app) is never touched here.
 
 import {
   verifySessionToken,
   getUserByEmail,
   getActiveEntitlements,
   buildAccountSnapshot,
+  decrementSupportCredits,
+  logSupportCreditEvent,
 } from '../lib/supportAccess.js';
 import { buildSupportSystemPrompt } from '../lib/supportPrompt.js';
 import { getAnthropicClient }       from '../lib/anthropic.js';
@@ -41,15 +46,27 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, reason: 'empty_message' });
     }
 
-    // 3. Load safe account snapshot
+    // 3. Load user and account snapshot
     const user         = await getUserByEmail(session.email);
     const entitlements = user ? await getActiveEntitlements(session.email) : [];
     const snapshot     = user ? buildAccountSnapshot(user, entitlements) : null;
 
-    // 4. Build system prompt from safe knowledge + safe account context
+    // 4. Check support chat credits
+    //    Admin bypass (support_access_enabled = true) skips deduction entirely.
+    const adminOverride  = user?.support_access_enabled === true;
+    const supportCredits = user?.support_chat_credits_remaining ?? 0;
+
+    if (!adminOverride && supportCredits <= 0) {
+      return res.status(200).json({
+        ok:     true,
+        answer: 'Your Star Support chat credits have been used. You can add more support access through Stoic Qabalah.',
+        credits_exhausted: true,
+      });
+    }
+
+    // 5. Build prompt and call Anthropic
     const systemPrompt = buildSupportSystemPrompt(snapshot);
 
-    // 5. Call Anthropic
     const response = await getAnthropicClient().messages.create({
       model:      'claude-sonnet-4-6',
       max_tokens: 512,
@@ -60,10 +77,22 @@ export default async function handler(req, res) {
     const answer = response.content?.[0]?.text?.trim()
       || 'I was unable to generate a response. Please try again.';
 
+    // 6. Deduct credit and log — only after successful answer, only for non-admin
+    if (!adminOverride) {
+      const newBalance = await decrementSupportCredits(session.email);
+      await logSupportCreditEvent(session.email, {
+        amount:        -1,
+        event_type:    'support_chat_used',
+        balance_after: newBalance,
+        source:        'star_support_chat',
+      });
+    }
+
     return res.status(200).json({ ok: true, answer });
 
   } catch (err) {
     console.error('[stoicqabalahsupportbot] error', err.message);
-    return res.status(500).json({ ok: false, reason: 'server_error', detail: err.message });
+    // No credit deduction on error
+    return res.status(500).json({ ok: false, reason: 'server_error' });
   }
 }
