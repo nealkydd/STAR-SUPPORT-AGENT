@@ -42,13 +42,50 @@ body {
 }
 
 .hero-card {
+  position: relative;
+  overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 24px;
-  background: linear-gradient(160deg, rgba(22, 20, 14, 0.99) 0%, rgba(14, 13, 11, 0.99) 100%);
+  background: #10100E;
   box-shadow:
     0 40px 100px var(--shadow),
     0 0 0 1px rgba(201, 164, 93, 0.04) inset;
   padding: clamp(32px, 5vw, 64px);
+}
+
+/* Starfield image layer */
+.hero-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/STARFIELD.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  opacity: 0.22;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* Dark gradient overlay to keep palette premium and readable */
+.hero-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(10, 9, 7, 0.72) 0%,
+      rgba(10, 9, 7, 0.45) 40%,
+      rgba(10, 9, 7, 0.72) 100%),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(10, 9, 7, 0.5), transparent);
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* All direct children sit above the image and overlay */
+.hero-card > * {
+  position: relative;
+  z-index: 2;
 }
 
 /* ─── Sun logo ───────────────────────────────── */
@@ -118,7 +155,7 @@ h2 {
 .gate-card {
   border: 1px solid var(--border);
   border-radius: 16px;
-  background: rgba(28, 25, 19, 0.55);
+  background: rgba(16, 14, 10, 0.92);
   padding: 36px 40px;
   max-width: 520px;
 }
@@ -215,7 +252,7 @@ h2 {
 .account-panel {
   border: 1px solid var(--border-light);
   border-radius: 14px;
-  background: rgba(28, 25, 19, 0.6);
+  background: rgba(20, 18, 13, 0.96);
   padding: 20px 24px;
   margin-bottom: 20px;
 }
@@ -301,7 +338,9 @@ h2 {
 .notice-card {
   border: 1px solid var(--border);
   border-radius: 16px;
-  background: rgba(28, 25, 19, 0.55);
+  background: rgba(16, 14, 10, 0.82);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   padding: 28px 32px;
   margin-bottom: 16px;
 }
@@ -327,7 +366,7 @@ h2 {
 .support-grid article {
   border: 1px solid rgba(201, 164, 93, 0.35);
   border-radius: 14px;
-  background: linear-gradient(180deg, rgba(201, 164, 93, 0.06), rgba(14, 13, 11, 0.5));
+  background: linear-gradient(180deg, rgba(22, 19, 13, 0.97), rgba(14, 13, 11, 0.97));
   padding: 20px;
   transition: border-color 0.2s;
 }
@@ -338,7 +377,7 @@ h2 {
 
 .support-grid article.blue-panel {
   border: 1px solid rgba(100, 160, 220, 0.55);
-  background: linear-gradient(180deg, rgba(80, 140, 210, 0.09), rgba(14, 13, 11, 0.5));
+  background: linear-gradient(180deg, rgba(16, 22, 32, 0.97), rgba(12, 13, 18, 0.97));
   box-shadow: 0 0 0 1px rgba(100, 160, 220, 0.1), 0 18px 40px rgba(0, 0, 0, 0.22);
 }
 
@@ -373,7 +412,7 @@ h2 {
 .chat-card {
   border: 1px solid rgba(0, 140, 0, 0.72);
   border-radius: 18px;
-  background: linear-gradient(180deg, rgba(0, 140, 0, 0.10), rgba(14, 13, 11, 0.92));
+  background: linear-gradient(180deg, rgba(10, 18, 10, 0.97), rgba(10, 13, 10, 0.97));
   box-shadow: 0 0 0 1px rgba(0, 140, 0, 0.12), 0 24px 60px rgba(0, 0, 0, 0.35);
   padding: 28px 32px;
 }
