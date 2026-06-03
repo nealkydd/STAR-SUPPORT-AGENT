@@ -264,13 +264,59 @@
     return html;
   }
 
+  function scrollTranscriptToLatest() {
+    responseArea.scrollTop = responseArea.scrollHeight;
+  }
+
+  function appendTranscriptMessage(role, text, options) {
+    options = options || {};
+
+    var entry = document.createElement('div');
+    entry.className = 'chat-entry chat-entry-' + role + (options.pending ? ' is-pending' : '');
+
+    var label = document.createElement('div');
+    label.className = 'chat-label';
+    label.textContent = role === 'user' ? 'You asked' : 'Star Support';
+
+    var body = document.createElement('div');
+    body.className = 'chat-body';
+
+    if (role === 'support') {
+      body.innerHTML = renderMarkdown(text);
+    } else {
+      body.textContent = text;
+    }
+
+    entry.appendChild(label);
+    entry.appendChild(body);
+    responseArea.appendChild(entry);
+    scrollTranscriptToLatest();
+
+    return entry;
+  }
+
+  function updateTranscriptMessage(entry, text, isError) {
+    if (!entry) return;
+
+    entry.classList.remove('is-pending');
+    if (isError) entry.classList.add('is-error');
+
+    var body = entry.querySelector('.chat-body');
+    if (body) body.innerHTML = renderMarkdown(text);
+
+    scrollTranscriptToLatest();
+  }
+
   function showResponse(text) {
-    responseArea.innerHTML = renderMarkdown(text);
+    appendTranscriptMessage('support', text);
   }
 
   function ask(message) {
     var clean = String(message || '').trim();
     if (!clean) return;
+
+    appendTranscriptMessage('user', clean);
+    var pendingEntry = appendTranscriptMessage('support', 'Star Support is thinking…', { pending: true });
 
     textarea.value = '';
     askButton.disabled = true;
@@ -286,10 +332,18 @@
     })
       .then(function (r) { return r.json(); })
       .then(function (data) {
-        showResponse(data.ok ? data.answer : 'Something went wrong. Please try again.');
+        updateTranscriptMessage(
+          pendingEntry,
+          data.ok ? data.answer : 'Something went wrong. Please try again.',
+          !(data && data.ok)
+        );
       })
       .catch(function () {
-        showResponse('Unable to reach Star Support. Please check your connection and try again.');
+        updateTranscriptMessage(
+          pendingEntry,
+          'Unable to reach Star Support. Please check your connection and try again.',
+          true
+        );
       })
       .finally(function () {
         askButton.disabled = false;
