@@ -104,10 +104,35 @@ export default async function handler(req, res) {
           </tr>
 
           <tr>
-            <td style="padding:24px 40px 28px 40px;border-top:1px solid #3A3122;">
-              <p style="margin:0;color:#6E6050;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.5;">
-                Stoic Qabalah<br>
-                Star Support &mdash; Your Stoic Qabalah Support Agent
+            <td style="padding:24px 40px 30px 40px;border-top:1px solid #3A3122;background-color:#15130F;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 18px auto;">
+                <tr>
+                  <td align="center" width="25%" style="padding:0 8px;">
+                    <img src="${supportUrl}/email-assets/elem-fire.jpg" width="56" height="56" alt="Fire" style="display:block;width:56px;height:56px;border-radius:8px;margin:0 auto 4px auto;object-fit:cover;">
+                    <div style="color:#C9A45D;font-family:Georgia,serif;font-size:16px;line-height:1;margin-bottom:6px;">△</div>
+                    <div style="color:#7E705E;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;">Fire</div>
+                  </td>
+                  <td align="center" width="25%" style="padding:0 8px;">
+                    <img src="${supportUrl}/email-assets/elem-water.jpg" width="56" height="56" alt="Water" style="display:block;width:56px;height:56px;border-radius:8px;margin:0 auto 4px auto;object-fit:cover;">
+                    <div style="color:#C9A45D;font-family:Georgia,serif;font-size:16px;line-height:1;margin-bottom:6px;">▽</div>
+                    <div style="color:#7E705E;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;">Water</div>
+                  </td>
+                  <td align="center" width="25%" style="padding:0 8px;">
+                    <img src="${supportUrl}/email-assets/elem-air.jpg" width="56" height="56" alt="Air" style="display:block;width:56px;height:56px;border-radius:8px;margin:0 auto 4px auto;object-fit:cover;">
+                    <div style="color:#C9A45D;font-family:Georgia,serif;font-size:16px;line-height:1;margin-bottom:6px;">🜁</div>
+                    <div style="color:#7E705E;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;">Air</div>
+                  </td>
+                  <td align="center" width="25%" style="padding:0 8px;">
+                    <img src="${supportUrl}/email-assets/elem-earth.jpg" width="56" height="56" alt="Earth" style="display:block;width:56px;height:56px;border-radius:8px;margin:0 auto 4px auto;object-fit:cover;">
+                    <div style="color:#C9A45D;font-family:Georgia,serif;font-size:16px;line-height:1;margin-bottom:6px;">🜃</div>
+                    <div style="color:#7E705E;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;">Earth</div>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0;color:#6E6050;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.6;">
+                Stoic Qabalah · Star Support<br>
+                AstroQabalah &mdash; The Tree of Life Reader &amp; Hermetic Oracle
               </p>
             </td>
           </tr>
