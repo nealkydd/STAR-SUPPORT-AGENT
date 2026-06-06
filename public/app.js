@@ -241,11 +241,11 @@
       { src: '/screenshots/save_reading.png', caption: 'Save Reading', desc: 'Return when you need help with saved readings, products, or continuing your journey.' },
     ],
     all: [
-      { src: '/screenshots/app_gate.png',         caption: '1 — App Home',        desc: 'The AstroQabalah Tree of Life Reader. Enter with the email connected to your Reader, trial, or product purchase.' },
-      { src: '/screenshots/app_tree_reading.png', caption: '2 — Tree Reading',   desc: 'Work through the Tree journey, sphere meanings, and your personal reading.' },
-      { src: '/screenshots/app_transits.png',     caption: '3 — Transits',       desc: 'Find guidance for weekly and current transit readings within the Tree.' },
-      { src: '/screenshots/app_oracle.png',       caption: '4 — Oracle',         desc: 'Consult the Oracle layer — credits, question flow, and usage guidance.' },
-      { src: '/screenshots/save_reading.png',     caption: '5 — Save & Return',  desc: 'Save your reading and return to continue your journey at any time.' },
+      { src: '/screenshots/app_gate.png',         step: 'STEP 1', caption: 'Member Access',  desc: 'The AstroQabalah Tree of Life Reader. Enter with the email connected to your Reader, trial, or product purchase.' },
+      { src: '/screenshots/app_tree_reading.png', step: 'STEP 2', caption: 'Tree Reading',   desc: 'Work through the Tree journey, sphere meanings, and your personal reading.' },
+      { src: '/screenshots/app_transits.png',     step: 'STEP 3', caption: 'Transits',       desc: 'Find guidance for weekly and current transit readings within the Tree.' },
+      { src: '/screenshots/app_oracle.png',       step: 'STEP 4', caption: 'Oracle',         desc: 'Consult the Oracle layer — credits, question flow, and usage guidance.' },
+      { src: '/screenshots/save_reading.png',     step: 'STEP 5', caption: 'Save & Return',  desc: 'Save your reading and return to continue your journey at any time.' },
     ],
   };
 
@@ -267,15 +267,21 @@
     images.forEach(function (item) {
       var card = document.createElement('div');
       card.className = 'carousel-card';
+      if (item.step) {
+        var badge = document.createElement('span');
+        badge.className = 'carousel-step-badge';
+        badge.textContent = item.step;
+        card.appendChild(badge);
+      }
       var img = document.createElement('img');
       img.src = item.src;
       img.alt = item.caption;
       img.className = 'carousel-img';
       img.loading = 'lazy';
+      card.appendChild(img);
       var cap = document.createElement('p');
       cap.className = 'carousel-caption';
       cap.textContent = item.caption;
-      card.appendChild(img);
       card.appendChild(cap);
       if (item.desc) {
         var desc = document.createElement('p');
