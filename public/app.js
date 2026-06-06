@@ -228,28 +228,36 @@
   // ── Screenshot carousel ────────────────────────────────────────
 
   var CAROUSEL_IMAGES = {
-    gate:         [{ src: '/screenshots/app_gate.png',         caption: 'Member Access'  }],
-    tree_reading: [{ src: '/screenshots/app_tree_reading.png', caption: 'Tree Reading'   }],
-    transits:     [{ src: '/screenshots/app_transits.png',     caption: 'Transits'       }],
-    oracle:       [{ src: '/screenshots/app_oracle.png',       caption: 'Oracle'         }],
-    save_reading: [{ src: '/screenshots/save_reading.png',     caption: 'Save Reading'   }],
+    gate: [
+      { src: '/screenshots/app_gate.png', caption: 'Member Access', desc: 'Enter with the email connected to your Reader, trial, or product purchase.' },
+    ],
+    transits: [
+      { src: '/screenshots/app_transits.png', caption: 'Transits', desc: 'Find guidance for weekly and current transit readings within the Tree.' },
+    ],
+    oracle: [
+      { src: '/screenshots/app_oracle.png', caption: 'Oracle', desc: 'Get help with Oracle-layer credits, question flow, and usage guidance.' },
+    ],
+    save_reading: [
+      { src: '/screenshots/save_reading.png', caption: 'Save Reading', desc: 'Return when you need help with saved readings, products, or continuing your journey.' },
+    ],
     all: [
-      { src: '/screenshots/app_gate.png',         caption: 'Member Access' },
-      { src: '/screenshots/app_tree_reading.png', caption: 'Tree Reading'  },
-      { src: '/screenshots/app_transits.png',     caption: 'Transits'      },
-      { src: '/screenshots/app_oracle.png',       caption: 'Oracle'        },
-      { src: '/screenshots/save_reading.png',     caption: 'Save Reading'  },
+      { src: '/screenshots/app_gate.png',         caption: '1 — Member Access',  desc: 'Enter with the email connected to your Reader, trial, or product purchase.' },
+      { src: '/screenshots/app_tree_reading.png', caption: '2 — Tree Reading',   desc: 'Work through the Tree journey, sphere meanings, and your personal reading.' },
+      { src: '/screenshots/app_transits.png',     caption: '3 — Transits',       desc: 'Find guidance for weekly and current transit readings within the Tree.' },
+      { src: '/screenshots/app_oracle.png',       caption: '4 — Oracle',         desc: 'Consult the Oracle layer — credits, question flow, and usage guidance.' },
+      { src: '/screenshots/save_reading.png',     caption: '5 — Save & Return',  desc: 'Save your reading and return to continue your journey at any time.' },
     ],
   };
 
   function detectCarouselTopic(message) {
     var m = message.toLowerCase();
-    if (/guide|walk.?through|overview|get started|how (do|to|can) i use|all|everything/.test(m)) return 'all';
-    if (/entry code|access code|reader entry|entry code|how (do|to|can) i (log|get) (in|access)/.test(m)) return 'gate';
-    if (/transit/.test(m)) return 'transits';
-    if (/oracle/.test(m)) return 'oracle';
-    if (/save|saved reading|return later|continue.*journey/.test(m)) return 'save_reading';
-    if (/tree|sphere|sephir|reading|journey/.test(m)) return 'tree_reading';
+    // Specific single-topic queries
+    if (/transit/.test(m) && !/reader|guide|all|overview/.test(m)) return 'transits';
+    if (/oracle/.test(m) && !/reader|guide|all|overview/.test(m)) return 'oracle';
+    if (/save|saved reading|return later/.test(m) && !/reader|guide|all|overview/.test(m)) return 'save_reading';
+    if (/entry code|access code/.test(m) && !/reader|guide|all|overview/.test(m)) return 'gate';
+    // General reader / walkthrough queries → all 5
+    if (/reader|guide|walk.?through|overview|get started|how (do|to|can) i|sphere|sephir|tree|journey|everything|all/.test(m)) return 'all';
     return null;
   }
 
@@ -269,6 +277,12 @@
       cap.textContent = item.caption;
       card.appendChild(img);
       card.appendChild(cap);
+      if (item.desc) {
+        var desc = document.createElement('p');
+        desc.className = 'carousel-desc';
+        desc.textContent = item.desc;
+        card.appendChild(desc);
+      }
       wrap.appendChild(card);
     });
     responseArea.appendChild(wrap);
