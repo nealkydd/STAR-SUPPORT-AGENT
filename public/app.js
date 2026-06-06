@@ -241,7 +241,7 @@
       { src: '/screenshots/save_reading.png', caption: 'Save Reading', desc: 'Return when you need help with saved readings, products, or continuing your journey.' },
     ],
     all: [
-      { src: '/screenshots/app_gate.png',         caption: '1 — Member Access',  desc: 'Enter with the email connected to your Reader, trial, or product purchase.' },
+      { src: '/screenshots/app_gate.png',         caption: '1 — App Home',        desc: 'The AstroQabalah Tree of Life Reader. Enter with the email connected to your Reader, trial, or product purchase.' },
       { src: '/screenshots/app_tree_reading.png', caption: '2 — Tree Reading',   desc: 'Work through the Tree journey, sphere meanings, and your personal reading.' },
       { src: '/screenshots/app_transits.png',     caption: '3 — Transits',       desc: 'Find guidance for weekly and current transit readings within the Tree.' },
       { src: '/screenshots/app_oracle.png',       caption: '4 — Oracle',         desc: 'Consult the Oracle layer — credits, question flow, and usage guidance.' },
