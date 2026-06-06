@@ -224,7 +224,8 @@ h2 {
   padding: 13px 28px;
   text-transform: uppercase;
   transition: background 0.2s;
-  margin-top: 4px;
+  margin-top: 18px;
+  margin-bottom: 18px;
 }
 
 .gate-form button:hover {
@@ -649,9 +650,77 @@ textarea::placeholder {
   padding-top: 18px;
 }
 
+/* ─── Walkthrough ────────────────────────────── */
+
+.walkthrough {
+  margin-top: 44px;
+}
+
+.walkthrough-sub {
+  margin: 4px 0 28px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.walkthrough-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.walkthrough-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(20, 17, 12, 0.94);
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.38);
+  transition: border-color 0.2s;
+}
+
+.walkthrough-card:hover {
+  border-color: rgba(201, 164, 93, 0.45);
+}
+
+.walkthrough-img-wrap {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  background: #0e0d0b;
+}
+
+.walkthrough-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.walkthrough-title {
+  margin: 14px 14px 6px;
+  color: var(--soft-gold);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.walkthrough-text {
+  margin: 0 14px 16px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
 /* ─── Responsive ─────────────────────────────── */
 
 @media (max-width: 860px) {
+  .walkthrough-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .support-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -690,6 +759,10 @@ textarea::placeholder {
   .notice-card,
   .chat-card {
     padding: 20px;
+  }
+
+  .walkthrough-grid {
+    grid-template-columns: 1fr;
   }
 
   .support-grid {
