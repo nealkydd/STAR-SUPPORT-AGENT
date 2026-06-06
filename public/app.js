@@ -286,16 +286,19 @@
       img.loading = 'lazy';
       frame.appendChild(img);
       card.appendChild(frame);
+      var copy = document.createElement('div');
+      copy.className = 'carousel-copy';
       var cap = document.createElement('p');
       cap.className = 'carousel-caption';
       cap.textContent = item.caption;
-      card.appendChild(cap);
+      copy.appendChild(cap);
       if (item.desc) {
         var desc = document.createElement('p');
         desc.className = 'carousel-desc';
         desc.textContent = item.desc;
-        card.appendChild(desc);
+        copy.appendChild(desc);
       }
+      card.appendChild(copy);
       track.appendChild(card);
     });
 

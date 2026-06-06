@@ -673,10 +673,10 @@ textarea::placeholder {
 }
 
 .carousel-card {
-  flex: 0 0 clamp(230px, 24vw, 280px);
+  flex: 0 0 clamp(320px, 31vw, 380px);
   scroll-snap-align: start;
   border: 1px solid rgba(201, 164, 93, 0.28);
-  border-radius: 12px;
+  border-radius: 16px;
   background: rgba(16, 14, 10, 0.92);
   overflow: hidden;
   position: relative;
@@ -698,36 +698,45 @@ textarea::placeholder {
 }
 
 .carousel-media-frame {
-  margin: 0 12px 0;
-  padding: 8px;
-  border: 1px solid rgba(201, 164, 93, 0.28);
-  border-radius: 12px;
+  margin: 0 14px 0;
+  padding: 12px;
+  border: 1px solid rgba(201, 164, 93, 0.30);
+  border-radius: 14px;
   background: rgba(12, 10, 8, 0.92);
+  overflow: hidden;
 }
 
 .carousel-img {
   width: 100%;
-  aspect-ratio: 9 / 16;
-  object-fit: cover;
-  object-position: top;
+  height: auto;
   display: block;
-  border-radius: 7px;
+  border-radius: 9px;
+}
+
+.carousel-copy {
+  margin: 12px 14px 16px;
+  padding: 12px 13px;
+  border: 1px solid rgba(201, 164, 93, 0.16);
+  border-radius: 12px;
+  background: rgba(8, 7, 5, 0.58);
+  text-align: left;
 }
 
 .carousel-caption {
-  margin: 10px 12px 4px;
+  margin: 0 0 7px;
   color: var(--soft-gold);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
 }
 
 .carousel-desc {
-  margin: 0 12px 14px;
+  margin: 0;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
-  line-height: 1.55;
+  line-height: 1.45;
 }
 
 /* Arrow buttons — desktop only */
@@ -769,7 +778,7 @@ textarea::placeholder {
 /* Mobile: nearly full-width cards */
 @media (max-width: 600px) {
   .carousel-card {
-    flex-basis: 78vw;
+    flex-basis: 84vw;
   }
 }
 
