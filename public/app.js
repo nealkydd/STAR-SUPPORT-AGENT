@@ -241,11 +241,11 @@
       { src: '/screenshots/save_reading.png', caption: 'Save Reading', desc: 'Return when you need help with saved readings, products, or continuing your journey.' },
     ],
     all: [
-      { src: '/screenshots/app_gate.png',         step: 'STEP 1', caption: 'Member Access',  desc: 'The AstroQabalah Tree of Life Reader. Enter with the email connected to your Reader, trial, or product purchase.' },
-      { src: '/screenshots/app_tree_reading.png', step: 'STEP 2', caption: 'Tree Reading',   desc: 'Work through the Tree journey, sphere meanings, and your personal reading.' },
-      { src: '/screenshots/app_transits.png',     step: 'STEP 3', caption: 'Transits',       desc: 'Find guidance for weekly and current transit readings within the Tree.' },
-      { src: '/screenshots/app_oracle.png',       step: 'STEP 4', caption: 'Oracle',         desc: 'Consult the Oracle layer — credits, question flow, and usage guidance.' },
-      { src: '/screenshots/save_reading.png',     step: 'STEP 5', caption: 'Save & Return',  desc: 'Save your reading and return to continue your journey at any time.' },
+      { src: '/screenshots/app_gate.png',         step: 'STEP 1', caption: 'Member Access', desc: 'Enter with the email linked to your Reader, trial, or purchase.' },
+      { src: '/screenshots/app_tree_reading.png', step: 'STEP 2', caption: 'Tree Reading',  desc: 'Work through the Tree journey, spheres, and personal reading.' },
+      { src: '/screenshots/app_transits.png',     step: 'STEP 3', caption: 'Transits',      desc: 'Read weekly and current transits through the Tree.' },
+      { src: '/screenshots/app_oracle.png',       step: 'STEP 4', caption: 'Oracle',        desc: 'Ask Oracle-layer questions and understand credit use.' },
+      { src: '/screenshots/save_reading.png',     step: 'STEP 5', caption: 'Save & Return', desc: 'Save readings and return when you need guidance.' },
     ],
   };
 
@@ -262,8 +262,12 @@
   }
 
   function renderSupportCarousel(images) {
-    var wrap = document.createElement('div');
-    wrap.className = 'support-carousel';
+    var outer = document.createElement('div');
+    outer.className = 'carousel-outer';
+
+    var track = document.createElement('div');
+    track.className = 'support-carousel';
+
     images.forEach(function (item) {
       var card = document.createElement('div');
       card.className = 'carousel-card';
@@ -289,9 +293,30 @@
         desc.textContent = item.desc;
         card.appendChild(desc);
       }
-      wrap.appendChild(card);
+      track.appendChild(card);
     });
-    responseArea.appendChild(wrap);
+
+    // Arrow buttons (hidden on touch devices via CSS)
+    var prev = document.createElement('button');
+    prev.className = 'carousel-arrow carousel-arrow-prev';
+    prev.setAttribute('aria-label', 'Previous');
+    prev.textContent = '‹';
+    prev.addEventListener('click', function () {
+      track.scrollBy({ left: -290, behavior: 'smooth' });
+    });
+
+    var next = document.createElement('button');
+    next.className = 'carousel-arrow carousel-arrow-next';
+    next.setAttribute('aria-label', 'Next');
+    next.textContent = '›';
+    next.addEventListener('click', function () {
+      track.scrollBy({ left: 290, behavior: 'smooth' });
+    });
+
+    outer.appendChild(prev);
+    outer.appendChild(track);
+    outer.appendChild(next);
+    responseArea.appendChild(outer);
     scrollTranscriptToLatest();
   }
 
