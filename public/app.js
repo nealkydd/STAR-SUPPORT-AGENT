@@ -277,12 +277,15 @@
         badge.textContent = item.step;
         card.appendChild(badge);
       }
+      var frame = document.createElement('div');
+      frame.className = 'carousel-media-frame';
       var img = document.createElement('img');
       img.src = item.src;
       img.alt = item.caption;
       img.className = 'carousel-img';
       img.loading = 'lazy';
-      card.appendChild(img);
+      frame.appendChild(img);
+      card.appendChild(frame);
       var cap = document.createElement('p');
       cap.className = 'carousel-caption';
       cap.textContent = item.caption;
