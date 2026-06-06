@@ -655,17 +655,21 @@ textarea::placeholder {
 .carousel-outer {
   position: relative;
   margin-top: 14px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .support-carousel {
   display: flex;
   gap: 12px;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   padding: 4px 0 10px;
   scrollbar-width: none;
+  max-width: 100%;
 }
 
 .support-carousel::-webkit-scrollbar {
@@ -673,7 +677,7 @@ textarea::placeholder {
 }
 
 .carousel-card {
-  flex: 0 0 clamp(320px, 31vw, 380px);
+  flex: 0 0 clamp(260px, 24vw, 310px);
   scroll-snap-align: start;
   border: 1px solid rgba(201, 164, 93, 0.28);
   border-radius: 16px;
@@ -698,10 +702,10 @@ textarea::placeholder {
 }
 
 .carousel-media-frame {
-  margin: 0 14px 0;
-  padding: 12px;
-  border: 1px solid rgba(201, 164, 93, 0.30);
-  border-radius: 14px;
+  margin: 0 12px;
+  padding: 8px;
+  border: 1px solid rgba(201, 164, 93, 0.28);
+  border-radius: 12px;
   background: rgba(12, 10, 8, 0.92);
   overflow: hidden;
 }
@@ -714,18 +718,18 @@ textarea::placeholder {
 }
 
 .carousel-copy {
-  margin: 12px 14px 16px;
-  padding: 12px 13px;
+  margin: 10px 12px 13px;
+  padding: 10px 11px;
   border: 1px solid rgba(201, 164, 93, 0.16);
-  border-radius: 12px;
+  border-radius: 10px;
   background: rgba(8, 7, 5, 0.58);
   text-align: left;
 }
 
 .carousel-caption {
-  margin: 0 0 7px;
+  margin: 0 0 5px;
   color: var(--soft-gold);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.01em;
   line-height: 1.25;
@@ -734,9 +738,9 @@ textarea::placeholder {
 .carousel-desc {
   margin: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 /* Arrow buttons — desktop only */
@@ -778,7 +782,7 @@ textarea::placeholder {
 /* Mobile: nearly full-width cards */
 @media (max-width: 600px) {
   .carousel-card {
-    flex-basis: 84vw;
+    flex-basis: 74vw;
   }
 }
 
