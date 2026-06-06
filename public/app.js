@@ -225,6 +225,56 @@
     });
   }
 
+  // ── Screenshot carousel ────────────────────────────────────────
+
+  var CAROUSEL_IMAGES = {
+    gate:         [{ src: '/screenshots/app_gate.png',         caption: 'Member Access'  }],
+    tree_reading: [{ src: '/screenshots/app_tree_reading.png', caption: 'Tree Reading'   }],
+    transits:     [{ src: '/screenshots/app_transits.png',     caption: 'Transits'       }],
+    oracle:       [{ src: '/screenshots/app_oracle.png',       caption: 'Oracle'         }],
+    save_reading: [{ src: '/screenshots/save_reading.png',     caption: 'Save Reading'   }],
+    all: [
+      { src: '/screenshots/app_gate.png',         caption: 'Member Access' },
+      { src: '/screenshots/app_tree_reading.png', caption: 'Tree Reading'  },
+      { src: '/screenshots/app_transits.png',     caption: 'Transits'      },
+      { src: '/screenshots/app_oracle.png',       caption: 'Oracle'        },
+      { src: '/screenshots/save_reading.png',     caption: 'Save Reading'  },
+    ],
+  };
+
+  function detectCarouselTopic(message) {
+    var m = message.toLowerCase();
+    if (/guide|walk.?through|overview|get started|how (do|to|can) i use|all|everything/.test(m)) return 'all';
+    if (/entry code|access code|reader entry|entry code|how (do|to|can) i (log|get) (in|access)/.test(m)) return 'gate';
+    if (/transit/.test(m)) return 'transits';
+    if (/oracle/.test(m)) return 'oracle';
+    if (/save|saved reading|return later|continue.*journey/.test(m)) return 'save_reading';
+    if (/tree|sphere|sephir|reading|journey/.test(m)) return 'tree_reading';
+    return null;
+  }
+
+  function renderSupportCarousel(images) {
+    var wrap = document.createElement('div');
+    wrap.className = 'support-carousel';
+    images.forEach(function (item) {
+      var card = document.createElement('div');
+      card.className = 'carousel-card';
+      var img = document.createElement('img');
+      img.src = item.src;
+      img.alt = item.caption;
+      img.className = 'carousel-img';
+      img.loading = 'lazy';
+      var cap = document.createElement('p');
+      cap.className = 'carousel-caption';
+      cap.textContent = item.caption;
+      card.appendChild(img);
+      card.appendChild(cap);
+      wrap.appendChild(card);
+    });
+    responseArea.appendChild(wrap);
+    scrollTranscriptToLatest();
+  }
+
   // ── Chat ───────────────────────────────────────────────────────
 
   function renderMarkdown(text) {
@@ -311,7 +361,7 @@
     appendTranscriptMessage('support', text);
   }
 
-  function ask(message) {
+  function ask(message, forcedTopic) {
     var clean = String(message || '').trim();
     if (!clean) return;
 
@@ -337,6 +387,10 @@
           data.ok ? data.answer : 'Something went wrong. Please try again.',
           !(data && data.ok)
         );
+        if (data && data.ok) {
+          var topic = forcedTopic !== undefined ? forcedTopic : detectCarouselTopic(clean);
+          if (topic) renderSupportCarousel(CAROUSEL_IMAGES[topic]);
+        }
       })
       .catch(function () {
         updateTranscriptMessage(
@@ -351,8 +405,21 @@
       });
   }
 
+  var QUICK_BUTTON_TOPICS = {
+    'Reader Entry Code help':      'gate',
+    'Guide me through the Reader': 'all',
+    'Credit query':                'oracle',
+    'Account support':             null,
+  };
+
   quickButtons.forEach(function (button) {
-    button.addEventListener('click', function () { ask(button.textContent); });
+    button.addEventListener('click', function () {
+      var label = button.textContent.trim();
+      var forcedTopic = Object.prototype.hasOwnProperty.call(QUICK_BUTTON_TOPICS, label)
+        ? QUICK_BUTTON_TOPICS[label]
+        : undefined;
+      ask(label, forcedTopic);
+    });
   });
 
   askButton.addEventListener('click', function () { ask(textarea.value); });
