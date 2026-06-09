@@ -26,6 +26,95 @@
   const askButton         = document.getElementById('ask-button');
   const quickButtons      = Array.from(document.querySelectorAll('.quick-actions button'));
 
+  // ── Staged question display ─────────────────────────────────────
+  let activeQuestionText = '';
+  let activeQuestionBox = null;
+  const ALLOWED_SUPPORT_CLOSER = 'Is there anything else I can help you with?';
+
+  function ensureActiveQuestionBox() {
+    if (activeQuestionBox) return activeQuestionBox;
+
+    activeQuestionBox = document.createElement('div');
+    activeQuestionBox.className = 'active-question-box';
+    activeQuestionBox.hidden = true;
+    activeQuestionBox.innerHTML =
+      '<div class="active-question-label">Current question</div>' +
+      '<div class="active-question-text"></div>';
+
+    if (responseArea && responseArea.parentNode) {
+      responseArea.parentNode.insertBefore(activeQuestionBox, responseArea);
+    }
+
+    injectActiveQuestionStyles();
+    return activeQuestionBox;
+  }
+
+  function setActiveQuestion(text) {
+    activeQuestionText = String(text || '').trim();
+    var box = ensureActiveQuestionBox();
+    var textEl = box.querySelector('.active-question-text');
+
+    if (textEl) textEl.textContent = activeQuestionText;
+    box.hidden = !activeQuestionText;
+  }
+
+  function injectActiveQuestionStyles() {
+    if (document.getElementById('active-question-styles')) return;
+
+    var style = document.createElement('style');
+    style.id = 'active-question-styles';
+    style.textContent = [
+      '.active-question-box {',
+      '  margin: 16px 0 18px;',
+      '  padding: 14px 16px;',
+      '  border: 1px solid rgba(201, 168, 102, 0.32);',
+      '  border-radius: 14px;',
+      '  background: rgba(20, 17, 12, 0.72);',
+      '  box-shadow: inset 0 0 0 1px rgba(201, 168, 102, 0.06);',
+      '}',
+      '.active-question-label {',
+      '  margin-bottom: 7px;',
+      '  font-size: 0.68rem;',
+      '  letter-spacing: 0.22em;',
+      '  text-transform: uppercase;',
+      '  color: #c9a866;',
+      '}',
+      '.active-question-text {',
+      '  color: #f0e6d0;',
+      '  font-size: 1rem;',
+      '  line-height: 1.55;',
+      '}'
+    ].join('\n');
+
+    document.head.appendChild(style);
+  }
+
+  function normaliseSupportAnswer(text) {
+    var answer = String(text || '').trim();
+
+    // Remove assistant-generated openers/closers if they appear inside the answer.
+    answer = answer
+      .replace(/(^|\n)\s*What can I help you with\?\s*/gi, '\n')
+      .replace(/(^|\n)\s*Is there anything else I can help you with\?\s*/gi, '\n')
+      .trim();
+
+    // Remove an unauthorised final follow-up question if it appears as its own last line.
+    var lines = answer.split('\n');
+    while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
+
+    if (lines.length) {
+      var last = lines[lines.length - 1].trim();
+      if (/\?$/.test(last) && !/^is there anything else i can help you with\?$/i.test(last)) {
+        lines.pop();
+        answer = lines.join('\n').trim();
+      }
+    }
+
+    if (!answer) answer = 'I can help with that.';
+
+    return answer + '\n\n' + ALLOWED_SUPPORT_CLOSER;
+  }
+
   // ── Session ────────────────────────────────────────────────────
   let sessionEmail  = null;
   let sessionToken  = null;   // raw token — stored in memory only, never persisted
@@ -416,7 +505,7 @@
     var clean = String(message || '').trim();
     if (!clean) return;
 
-    appendTranscriptMessage('user', clean);
+    setActiveQuestion(clean);
     var pendingEntry = appendTranscriptMessage('support', 'Star Support is thinking…', { pending: true });
 
     textarea.value = '';
@@ -435,7 +524,7 @@
       .then(function (data) {
         updateTranscriptMessage(
           pendingEntry,
-          data.ok ? data.answer : 'Something went wrong. Please try again.',
+          data.ok ? normaliseSupportAnswer(data.answer) : 'Something went wrong. Please try again.',
           !(data && data.ok)
         );
         if (data && data.ok) {
