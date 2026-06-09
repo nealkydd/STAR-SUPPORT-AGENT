@@ -679,7 +679,7 @@ textarea::placeholder {
 .carousel-card {
   flex: 0 0 clamp(260px, 24vw, 310px);
   scroll-snap-align: start;
-  border: 1px solid rgba(201, 164, 93, 0.28);
+  border: 0;
   border-radius: 16px;
   background: rgba(16, 14, 10, 0.92);
   overflow: hidden;
@@ -704,7 +704,7 @@ textarea::placeholder {
 .carousel-media-frame {
   margin: 0 12px;
   padding: 8px;
-  border: 1px solid rgba(201, 164, 93, 0.28);
+  border: 0;
   border-radius: 12px;
   background: rgba(12, 10, 8, 0.92);
   overflow: hidden;
