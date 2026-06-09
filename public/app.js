@@ -28,65 +28,20 @@
 
   // ── Staged question display ─────────────────────────────────────
   let activeQuestionText = '';
-  let activeQuestionBox = null;
   const ALLOWED_SUPPORT_CLOSER = 'Is there anything else I can help you with?';
-
-  function ensureActiveQuestionBox() {
-    if (activeQuestionBox) return activeQuestionBox;
-
-    activeQuestionBox = document.createElement('div');
-    activeQuestionBox.className = 'active-question-box';
-    activeQuestionBox.hidden = true;
-    activeQuestionBox.innerHTML =
-      '<div class="active-question-label">Current question</div>' +
-      '<div class="active-question-text"></div>';
-
-    if (responseArea && responseArea.parentNode) {
-      responseArea.parentNode.insertBefore(activeQuestionBox, responseArea);
-    }
-
-    injectActiveQuestionStyles();
-    return activeQuestionBox;
-  }
+  const renderedCarouselTopics = new Set();
 
   function setActiveQuestion(text) {
     activeQuestionText = String(text || '').trim();
-    var box = ensureActiveQuestionBox();
-    var textEl = box.querySelector('.active-question-text');
+    if (!activeQuestionText) return;
 
-    if (textEl) textEl.textContent = activeQuestionText;
-    box.hidden = !activeQuestionText;
-  }
+    // Mark any earlier staged question as previous, then stage the current
+    // question inside the scrollable transcript directly above the answer.
+    Array.from(responseArea.querySelectorAll('.chat-entry-user .chat-label')).forEach(function (label) {
+      if (label.textContent === 'Current question') label.textContent = 'Previous question';
+    });
 
-  function injectActiveQuestionStyles() {
-    if (document.getElementById('active-question-styles')) return;
-
-    var style = document.createElement('style');
-    style.id = 'active-question-styles';
-    style.textContent = [
-      '.active-question-box {',
-      '  margin: 16px 0 18px;',
-      '  padding: 14px 16px;',
-      '  border: 1px solid rgba(201, 168, 102, 0.32);',
-      '  border-radius: 14px;',
-      '  background: rgba(20, 17, 12, 0.72);',
-      '  box-shadow: inset 0 0 0 1px rgba(201, 168, 102, 0.06);',
-      '}',
-      '.active-question-label {',
-      '  margin-bottom: 7px;',
-      '  font-size: 0.68rem;',
-      '  letter-spacing: 0.22em;',
-      '  text-transform: uppercase;',
-      '  color: #c9a866;',
-      '}',
-      '.active-question-text {',
-      '  color: #f0e6d0;',
-      '  font-size: 1rem;',
-      '  line-height: 1.55;',
-      '}'
-    ].join('\n');
-
-    document.head.appendChild(style);
+    appendTranscriptMessage('user', activeQuestionText, { current: true });
   }
 
   function normaliseSupportAnswer(text) {
@@ -466,7 +421,9 @@
 
     var label = document.createElement('div');
     label.className = 'chat-label';
-    label.textContent = role === 'user' ? 'You asked' : 'Star Support';
+    label.textContent = role === 'user'
+      ? (options.current ? 'Current question' : 'Previous question')
+      : 'Star Support';
 
     var body = document.createElement('div');
     body.className = 'chat-body';
@@ -529,7 +486,7 @@
         );
         if (data && data.ok) {
           var topic = forcedTopic !== undefined ? forcedTopic : detectCarouselTopic(clean);
-          if (topic) renderSupportCarousel(CAROUSEL_IMAGES[topic]);
+          if (topic && shouldRenderCarousel(topic)) renderSupportCarousel(CAROUSEL_IMAGES[topic]);
         }
       })
       .catch(function () {
@@ -543,6 +500,20 @@
         askButton.disabled = false;
         askButton.textContent = 'Ask Star Support';
       });
+  }
+
+  function shouldRenderCarousel(topic) {
+    if (!topic) return false;
+
+    // If the full Reader walkthrough has already been shown, do not repeat
+    // smaller Reader/Oracle/Transit panels afterwards.
+    if (renderedCarouselTopics.has('all') && topic !== 'gate') return false;
+
+    // Do not repeat the same carousel topic in one support session.
+    if (renderedCarouselTopics.has(topic)) return false;
+
+    renderedCarouselTopics.add(topic);
+    return true;
   }
 
   var QUICK_BUTTON_TOPICS = {
